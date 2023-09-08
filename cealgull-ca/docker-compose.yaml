@@ -1,0 +1,31 @@
+version: "3.9"
+networks:
+  cealgull_ca:
+    name: "cealgull_ca"
+services:
+  tls-ca:
+    image: hyperledger/fabric-ca
+    command: fabric-ca-server start -d
+    environment:
+      - FABRIC_CA_SERVER_HOME=/etc/hyperledger/fabric-ca/crypto
+    volumes:
+      - /var/cealgull/fabric/tls-ca/crypto:/etc/hyperledger/fabric-ca/crypto
+      - ~/fabric-ca/configs/tls-ca/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca/crypto/fabric-ca-server-config.yaml
+    ports:
+      - 7054:7054
+    hostname: "tls-ca.cealgull.com"
+    networks:
+      - cealgull_ca
+  root-ca:
+    image: hyperledger/fabric-ca
+    command: fabric-ca-server start -d
+    environment:
+      - FABRIC_CA_SERVER_HOME=/etc/hyperledger/fabric-ca/crypto
+    volumes:
+      - /var/cealgull/fabric/root-ca/crypto:/etc/hyperledger/fabric-ca/crypto
+      - ~/fabric-ca/configs/root-ca/fabric-ca-server-config.yaml:/etc/hyperledger/fabric-ca/crypto/fabric-ca-server-config.yaml
+    ports:
+      - 7053:7054
+    hostname: "root-ca.cealgull.com"
+    networks:
+      - cealgull_ca
